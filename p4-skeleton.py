@@ -2,6 +2,7 @@
 
 from subprocess import Popen, DEVNULL
 import shlex, os, errno, time, glob
+import numpy as np
 
 # Constants for later use
 of2_verbose = False
@@ -25,7 +26,7 @@ except OSError as e:
         raise  # re-raise exception if a different error occurred
 
 # These lines write the command to run openface with the correct options
-command = shlex.split(" -device 1 -out_dir . -pose -2Dfp -of " + temp_output)
+command = shlex.split(" -device 0 -out_dir . -pose -2Dfp -of " + temp_output)
 command.insert(0, exe)
 
 # This line starts openface
@@ -87,21 +88,17 @@ while (of2.poll() == None):
 
         # ********************************************
         # Most, maybe all, of your code will go here
-        if len(list_pitch) < 12:
+        if len(list_pitch) < 20:
             list_pitch.append(pitch)
             list_yaw.append(yaw)
             list_roll.append(roll)
         else:
 
-            print(m_y_51, m_y_57);
+            # print(m_y_51 - m_y_57);
 
-            # print("pitch", max(list_pitch), min(list_pitch))
-            #print("pitch", abs(max(list_pitch) - min(list_pitch)))
-            #print("yaw", abs(max(list_yaw) - min(list_yaw)))
-            #print("roll", abs(max(list_roll) - min(list_roll)))
 
-            if abs(max(list_pitch) - min(list_pitch)) >= 0.365 and abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(
-                    max(list_roll) - min(list_roll)) < 0.15:
+            if np.var(list_pitch) >= 0.005 and abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(
+                    max(list_roll) - min(list_roll)):
                 print("Yes")
             if abs(max(list_yaw) - min(list_yaw)) >= 0.3 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
                     max(list_roll) - min(list_roll)) < 0.15:
@@ -109,6 +106,7 @@ while (of2.poll() == None):
             if abs(max(list_roll) - min(list_roll)) >= 0.3 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
                 max(list_yaw) - min(list_yaw)) < 0.15:
                 print("Indian Nod")
+
 
             list_pitch = []
             list_yaw = []
