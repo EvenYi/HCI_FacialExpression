@@ -51,8 +51,31 @@ while (of2.poll() == None):
         try:
             # Parse the line and save the useful values
             of_values = [float(v) for v in line.split(', ')]
+            # Yes No Indian Nod
             timestamp, confidence, success = of_values[2:5]
             pitch, yaw, roll = of_values[8:11]
+            print(len(of_values))
+
+            # Smile
+            '''
+            m_y_51 = of_values[272]
+            m_y_57 = of_values[278]
+            m_x_48 = of_values[269]
+            m_x_54 = of_values[275]
+
+            e_y_37 = of_values[258]
+            e_y_41 = of_values[262]
+            e_y_38 = of_values[259]
+            e_y_40 = of_values[261]
+
+            e_y_43 = of_values[264]
+            e_y_47 = of_values[268]
+            e_y_44 = of_values[265]
+            e_y_46 = of_values[267]
+
+            b_y_23 = of_values[244]
+            b_y_20 = of_values[241]
+            '''
             landmarks = []
             for i in range(11, 11 + landmark_count):
                 landmarks.append((of_values[i], of_values[i + landmark_count]))
@@ -62,11 +85,13 @@ while (of2.poll() == None):
 
         # ********************************************
         # Most, maybe all, of your code will go here
-        if len(list_pitch) < 15:
+        if len(list_pitch) < 12:
             list_pitch.append(pitch)
             list_yaw.append(yaw)
             list_roll.append(roll)
         else:
+
+            print(m_y_51, m_y_57);
 
             # print("pitch", max(list_pitch), min(list_pitch))
             #print("pitch", abs(max(list_pitch) - min(list_pitch)))
