@@ -54,12 +54,14 @@ while (of2.poll() == None):
             # Yes No Indian Nod
             timestamp, confidence, success = of_values[2:5]
             pitch, yaw, roll = of_values[8:11]
-            print(len(of_values))
+            #print(len(of_values))
 
             # Smile
+
+            m_y_51 = of_values[136]
+            m_y_57 = of_values[142]
+
             '''
-            m_y_51 = of_values[272]
-            m_y_57 = of_values[278]
             m_x_48 = of_values[269]
             m_x_54 = of_values[275]
 
