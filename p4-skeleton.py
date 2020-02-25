@@ -2,6 +2,7 @@
 
 from subprocess import Popen, DEVNULL
 import shlex, os, errno, time, glob
+import numpy as np
 
 # Constants for later use
 of2_verbose = False
@@ -44,7 +45,9 @@ data = open(temp_output_file, 'r')
 list_pitch = []
 list_yaw = []
 list_roll = []
-list_m_x_48_54 =[]
+list_m_x_48_54 = []
+list_m_y_51_57 = []
+list_be_y_24_43 = []
 while (of2.poll() == None):
     line = data.readline().strip()
 
@@ -55,7 +58,7 @@ while (of2.poll() == None):
             # Yes No Indian Nod
             timestamp, confidence, success = of_values[2:5]
             pitch, yaw, roll = of_values[8:11]
-            #print(len(of_values))
+            # print(len(of_values))
 
             # Smile
 
@@ -88,32 +91,33 @@ while (of2.poll() == None):
             list_yaw.append(yaw)
             list_roll.append(roll)
             list_m_x_48_54.append(abs(m_x_48 - m_x_54))
+            list_m_y_51_57.append(abs(m_y_51 - m_y_57))
+            list_be_y_24_43.append(abs(b_y_24 - e_y_43))
         else:
 
-
-
-            # print("pitch", max(list_pitch), min(list_pitch))
-            #print("pitch", abs(max(list_pitch) - min(list_pitch)))
-            #print("yaw", abs(max(list_yaw) - min(list_yaw)))
-            #print("roll", abs(max(list_roll) - min(list_roll)))
-
-            if abs(max(list_pitch) - min(list_pitch)) >= 0.365 and abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(
-                    max(list_roll) - min(list_roll)) < 0.15:
+            if np.var(list_pitch) >= 0.005 and abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(
+                    max(list_roll) - min(list_roll)):
                 print("Yes")
-            if abs(max(list_yaw) - min(list_yaw)) >= 0.3 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
-                    max(list_roll) - min(list_roll)) < 0.15:
+            elif abs(max(list_yaw) - min(list_yaw)) >= 0.25 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
+                    max(list_roll) - min(list_roll)) < 0.1:
                 print("No")
-            if abs(max(list_roll) - min(list_roll)) >= 0.3 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
-                max(list_yaw) - min(list_yaw)) < 0.15:
+            elif abs(max(list_roll) - min(list_roll)) >= 0.17 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
+                    max(list_yaw) - min(list_yaw)) < 0.15:
                 print("Indian Nod")
 
-
-            # Smile
-            print(list_m_x_48_54)
+            elif abs(max(list_yaw) - min(list_yaw)) < 0.1 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
+                    max(list_roll) - min(list_roll)) < 0.1 and abs(
+                max(list_m_y_51_57) - min(list_m_y_51_57)) > 1 and abs(
+                max(list_m_y_51_57) - min(list_m_y_51_57)) < 10 and abs(
+                max(list_m_x_48_54) - min(list_m_x_48_54)) > 6 and abs(max(list_be_y_24_43) - min(list_be_y_24_43)) < 2:
+                print("Smile")
 
             list_pitch = []
             list_yaw = []
             list_roll = []
+            list_m_x_48_54 = []
+            list_m_y_51_57 = []
+            list_be_y_24_43 = []
 
 
 
