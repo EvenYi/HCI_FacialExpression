@@ -44,6 +44,7 @@ data = open(temp_output_file, 'r')
 list_pitch = []
 list_yaw = []
 list_roll = []
+list_m_x_48_54 =[]
 while (of2.poll() == None):
     line = data.readline().strip()
 
@@ -58,26 +59,21 @@ while (of2.poll() == None):
 
             # Smile
 
-            m_y_51 = of_values[136]
-            m_y_57 = of_values[142]
+            m_y_51 = of_values[130]
+            m_y_57 = of_values[136]
+            m_x_48 = of_values[59]
+            m_x_54 = of_values[65]
+            e_y_37 = of_values[116]
+            e_y_41 = of_values[120]
+            e_y_38 = of_values[117]
+            e_y_40 = of_values[119]
+            e_y_43 = of_values[122]
+            e_y_47 = of_values[126]
+            e_y_44 = of_values[123]
+            e_y_46 = of_values[125]
+            b_y_24 = of_values[103]
+            b_y_19 = of_values[98]
 
-            '''
-            m_x_48 = of_values[269]
-            m_x_54 = of_values[275]
-
-            e_y_37 = of_values[258]
-            e_y_41 = of_values[262]
-            e_y_38 = of_values[259]
-            e_y_40 = of_values[261]
-
-            e_y_43 = of_values[264]
-            e_y_47 = of_values[268]
-            e_y_44 = of_values[265]
-            e_y_46 = of_values[267]
-
-            b_y_23 = of_values[244]
-            b_y_20 = of_values[241]
-            '''
             landmarks = []
             for i in range(11, 11 + landmark_count):
                 landmarks.append((of_values[i], of_values[i + landmark_count]))
@@ -91,9 +87,10 @@ while (of2.poll() == None):
             list_pitch.append(pitch)
             list_yaw.append(yaw)
             list_roll.append(roll)
+            list_m_x_48_54.append(abs(m_x_48 - m_x_54))
         else:
 
-            print(m_y_51, m_y_57);
+
 
             # print("pitch", max(list_pitch), min(list_pitch))
             #print("pitch", abs(max(list_pitch) - min(list_pitch)))
@@ -110,9 +107,15 @@ while (of2.poll() == None):
                 max(list_yaw) - min(list_yaw)) < 0.15:
                 print("Indian Nod")
 
+
+            # Smile
+            print(list_m_x_48_54)
+
             list_pitch = []
             list_yaw = []
             list_roll = []
+
+
 
     # ********************************************
 
