@@ -26,7 +26,7 @@ except OSError as e:
         raise  # re-raise exception if a different error occurred
 
 # These lines write the command to run openface with the correct options
-command = shlex.split(" -device 1 -out_dir . -pose -2Dfp -of " + temp_output)
+command = shlex.split(" -device 0 -out_dir . -pose -2Dfp -of " + temp_output)
 command.insert(0, exe)
 
 # This line starts openface
@@ -138,6 +138,11 @@ while (of2.poll() == None):
             mouth_width_list.append(mouth_width)
             pose_Tz_list.append(pose_Tz)
         else:
+            pose_Tz_avg = np.average(pose_Tz_list)
+
+            rate = 500 / (pose_Tz_avg + 50)   # the rate for changing threshold based on distance between user and computer
+            print(rate)
+
             brow_abs1 = max(brow_dist1_list) - min(brow_dist1_list)
             brow_abs2 = max(brow_dist2_list) - min(brow_dist2_list)
 
@@ -147,27 +152,30 @@ while (of2.poll() == None):
             mouth_dist_abs = max(mouth_long_list) - min(mouth_long_list)
             pose_Tz_abs = max(pose_Tz_list) - min(pose_Tz_list)
 
-            if np.var(list_pitch) >= 0.005 and abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(
-                    max(list_roll) - min(list_roll)):
+            if np.var(list_pitch) >= 0.005 * rate and abs(max(list_yaw) - min(list_yaw)) < 0.1 and abs(
+                    max(list_roll) - min(list_roll)) < 0.1:
                 print("Yes")
-            elif abs(max(list_yaw) - min(list_yaw)) >= 0.25 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
+            elif abs(max(list_yaw) - min(list_yaw)) >= 0.2 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
                     max(list_roll) - min(list_roll)) < 0.1:
                 print("No")
-            elif abs(max(list_roll) - min(list_roll)) >= 0.17 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
-                    max(list_yaw) - min(list_yaw)) < 0.15:
+            elif abs(max(list_roll) - min(list_roll)) >= 0.2 and abs(max(list_pitch) - min(list_pitch)) < 0.125 and abs(
+                    max(list_yaw) - min(list_yaw)) < 0.125:
                 print("Indian Nod")
 
             elif abs(max(list_yaw) - min(list_yaw)) < 0.1 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
                     max(list_roll) - min(list_roll)) < 0.1 and abs(
                 max(list_m_y_51_57) - min(list_m_y_51_57)) > 1 and abs(
                 max(list_m_y_51_57) - min(list_m_y_51_57)) < 10 and abs(
-                max(list_m_x_48_54) - min(list_m_x_48_54)) > 6 and abs(max(list_be_y_24_43) - min(list_be_y_24_43)) < 2:
+                max(list_m_x_48_54) - min(list_m_x_48_54)) > 5.3 and abs(max(list_be_y_24_43) - min(list_be_y_24_43)) < 2.5:
                 print("Smile")
-            elif abs(max(list_yaw) - min(list_yaw)) < 0.1 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
+            elif abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
                     max(list_roll) - min(
-                        list_roll)) < 0.1 and brow_abs1 >= 3 and brow_abs2 >= 3 and eye_abs1 >= 0.3 and eye_abs2 >= 0.3 and 15 >= mouth_dist_abs >= 2 and pose_Tz_abs <= 30:
+                        list_roll)) < 0.15 and brow_abs1 >= 2.5 * rate and brow_abs2 >= 2.5 * rate \
+                    and 15 * rate >= mouth_dist_abs >= 1.5 * rate:
                 print('SURPRISE!!!')
 
+            print('Pose_TZ', pose_Tz)
+            print(brow_abs1, brow_abs2, mouth_dist_abs)
             list_pitch = []
             list_yaw = []
             list_roll = []
