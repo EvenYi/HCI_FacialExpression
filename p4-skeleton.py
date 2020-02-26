@@ -168,15 +168,15 @@ while (of2.poll() == None):
             elif abs(max(list_yaw) - min(list_yaw)) < 0.1 and abs(max(list_pitch) - min(list_pitch)) < 0.1 and abs(
                     max(list_roll) - min(list_roll)) < 0.1 and abs(
                 max(list_m_y_51_57) - min(list_m_y_51_57)) > 1 and abs(
-                max(list_m_y_51_57) - min(list_m_y_51_57)) < 10 * rate and abs(
-                max(list_m_x_48_54) - min(list_m_x_48_54)) > 5.3 * rate and abs(
-                max(list_be_y_24_43) - min(list_be_y_24_43)) < 2.5 * rate:
+                max(list_m_y_51_57) - min(list_m_y_51_57)) < 5 and abs(
+                max(list_m_x_48_54) - min(list_m_x_48_54)) > 5 and abs(
+                max(list_be_y_24_43) - min(list_be_y_24_43)) < 1.75:
                 print("Smile")
             elif abs(max(list_yaw) - min(list_yaw)) < 0.15 and abs(max(list_pitch) - min(list_pitch)) < 0.15 and abs(
                     max(list_roll) - min(
-                        list_roll)) < 0.15 and brow_abs1 >= 2.5 * rate and brow_abs2 >= 2.5 * rate \
-                    and 15 * rate >= mouth_dist_abs >= 1.5 * rate and pose_Tz_abs <= 30:
-                print('SURPRISE!!!')
+                        list_roll)) < 0.15 and brow_abs1 >= 2.5 and brow_abs2 >= 2.5 \
+                    and 15 >= mouth_dist_abs >= 2.5 and pose_Tz_abs <= 30:
+                print('Surprise')
 
             # print('Pose_TZ', pose_Tz)
             # print(brow_abs1, brow_abs2, mouth_dist_abs)
@@ -192,7 +192,6 @@ while (of2.poll() == None):
             list_m_x_48_54 = []
             list_m_y_51_57 = []
             list_be_y_24_43 = []
-
 
 
 # ********************************************
